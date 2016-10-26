@@ -1,0 +1,11 @@
+{
+  "name": "url-query",
+  "version": "0.0.1",
+  "description": "Lightweight url query library",
+  "keywords": ["lightweight", "url", "query"],
+  "author": "Ciprian Roman",
+  "license": "MIT",
+  "dependencies": {
+    "uglify-js": "^2.7.3"
+  }
+}
