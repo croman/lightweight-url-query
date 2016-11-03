@@ -16,6 +16,26 @@
     }
   };
 
+  UrlQuery.getAll = function (url) {
+    if (!url) {
+      return {};
+    }
+
+    var query = {};
+    var qsIndex = url.indexOf("?");
+    if (url.length > 1 && qsIndex >= 0) {
+      var queryParts = url.substring(qsIndex + 1).split("&");
+      for (var i = 0; i < queryParts.length; i++) {
+        var param = queryParts[i].split("=");
+        if (param.length === 2) {
+          query[param[0]] = decodeURIComponent(param[1]);
+        }
+      }
+    }
+
+    return query;
+  };
+
   // Add or update query string parameter from an url.
   UrlQuery.update = function (url, field, value) {
     if (url === undefined) {
@@ -76,6 +96,20 @@
 
     return url;
   }
+
+  // Remove multiple query string parameters from an url.
+  UrlQuery.removeAll = function (url, fields) {
+    if (url === undefined || !fields) {
+      return url;
+    }
+
+    var updatedUrl = url;
+    for (var i = 0; i < fields.length; i++) {
+      updatedUrl = UrlQuery.remove(updatedUrl, fields[i]);
+    }
+
+    return updatedUrl;
+  };
 
   ns[ns.exports ? 'exports' : 'UrlQuery'] = UrlQuery;
 }(typeof module !== 'undefined' && module.exports ? module : window));
