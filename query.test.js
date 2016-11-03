@@ -27,6 +27,23 @@ assert(urlQuery.update("http://example.com/a/b?d=2&e=3", "c", "1") === "http://e
 assert(urlQuery.update("http://example.com/a/b?d=2&e=3", "g") === "http://example.com/a/b?d=2&e=3&g=undefined");
 assert(urlQuery.update("http://example.com/a/b?d=2&c=1&e=3", "c") === "http://example.com/a/b?d=2&c=undefined&e=3");
 
+//Test 'updateAll'.
+assert(urlQuery.updateAll(undefined, ["c"], ["1"]) === undefined);
+assert(urlQuery.updateAll("", ["c"], ["1"]) === "?c=1");
+assert(urlQuery.updateAll("http://example.com/a/b", ["c"], ["1"]) === "http://example.com/a/b?c=1");
+assert(urlQuery.updateAll("http://example.com/a/b", ["c", "d"], ["1", "2"]) === "http://example.com/a/b?c=1&d=2");
+assert(urlQuery.updateAll("http://example.com/a/b", ["b", "c", "d"], ["1", "a=b&c=d", "2"]) === "http://example.com/a/b?b=1&c=a%3Db%26c%3Dd&d=2");
+assert(urlQuery.updateAll("http://example.com/a/b?c=1", ["c"], ["1"]) === "http://example.com/a/b?c=1");
+assert(urlQuery.updateAll("http://example.com/a/b?c=1", ["c"], ["2"]) === "http://example.com/a/b?c=2");
+assert(urlQuery.updateAll("http://example.com/a/b?d=2&c=1&e=3", ["c"], ["2"]) === "http://example.com/a/b?d=2&c=2&e=3");
+assert(urlQuery.updateAll("http://example.com/a/b?d=2&c=1&e=3", ["c"], ["a=b&c=d"]) === "http://example.com/a/b?d=2&c=a%3Db%26c%3Dd&e=3");
+assert(urlQuery.updateAll("http://example.com/a/b?d=2", ["c"], ["1"]) === "http://example.com/a/b?d=2&c=1");
+assert(urlQuery.updateAll("http://example.com/a/b?d=2&e=3", ["c"], ["1"]) === "http://example.com/a/b?d=2&e=3&c=1");
+assert(urlQuery.updateAll("http://example.com/a/b?d=2&e=3", ["g"]) === "http://example.com/a/b?d=2&e=3");
+assert(urlQuery.updateAll("http://example.com/a/b?d=2&e=3", undefined, ["g"]) === "http://example.com/a/b?d=2&e=3");
+assert(urlQuery.updateAll("http://example.com/a/b?d=2&e=3") === "http://example.com/a/b?d=2&e=3");
+assert(urlQuery.updateAll("http://example.com/a/b?d=2&e=3", ["g"], []) === "http://example.com/a/b?d=2&e=3");
+
 // Test 'remove'.
 assert(urlQuery.remove("http://example.com/a/b", "c") === "http://example.com/a/b");
 assert(urlQuery.remove("http://example.com/a/b?c=1", "c") === "http://example.com/a/b");

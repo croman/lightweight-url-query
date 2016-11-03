@@ -32,6 +32,24 @@
     }
   };
 
+  // Add or update multiple query string parameters from an url.
+  UrlQuery.updateAll = function (url, fields, values) {
+    if (url === undefined || !fields || !values) {
+      return url;
+    }
+
+    if (fields.length !== values.length) {
+      return url;
+    }
+
+    var updatedUrl = url;
+    for (var i = 0; i < fields.length; i++) {
+      updatedUrl = UrlQuery.update(updatedUrl, fields[i], values[i]);
+    }
+
+    return updatedUrl;
+  };
+
   // Remove query string parameter from an url.
   UrlQuery.remove = function (url, field) {
     if (url === undefined) {
