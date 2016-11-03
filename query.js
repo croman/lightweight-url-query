@@ -12,7 +12,7 @@
     var re = new RegExp("[?&]" + field + "=([^&]*)");
     var match = url.match(re);
     if (match && match.length > 1) {
-      return match[1];
+      return decodeURIComponent(match[1]);
     }
   };
 
@@ -25,10 +25,10 @@
     var re = new RegExp("([?&])" + field + "=[^&]*");
     var match = url.match(re);
     if (match && match.length > 1) {
-      return url.replace(re, "$1" + field + "=" + value);
+      return url.replace(re, "$1" + field + "=" + encodeURIComponent(value));
     } else {
       var separator = url.indexOf("?") > 0 ? "&": "?";
-      return url + separator + field + "=" + value;
+      return url + separator + field + "=" + encodeURIComponent(value);
     }
   };
 
