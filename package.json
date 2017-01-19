@@ -5,6 +5,7 @@
   "keywords": ["lightweight", "url", "query"],
   "author": "Ciprian Roman",
   "license": "MIT",
+  "main": "query.js",
   "dependencies": {
     "uglify-js": "^2.7.3"
   }
