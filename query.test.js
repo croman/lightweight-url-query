@@ -12,6 +12,8 @@ assert(urlQuery.get("http://example.com/a/b?c=1&d=2&e=3&f=", "f") === "");
 assert(urlQuery.get("http://example.com/a/b?c=1&d=2&e=3&f=&g=5", "f") === "");
 assert(urlQuery.get("http://example.com/a/b?c=1&d=2&e=a%3Db%26c%3Dd&f=&g=5", "e") === "a=b&c=d");
 assert(urlQuery.get("http://example.com/a/b", "c") === undefined);
+assert(urlQuery.get("http://example.com/a/b", "c", "1") === "1");
+assert(urlQuery.get("http://example.com/a/b?c=1", "d", "2") === "2");
 
 //Test 'getAll'.
 assert.deepEqual(urlQuery.getAll(undefined), {});
