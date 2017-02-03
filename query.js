@@ -4,7 +4,7 @@
   function UrlQuery() {}
 
   // Get query string parameter value.
-  UrlQuery.get = function (url, field) {
+  UrlQuery.get = function (url, field, defaultValue) {
     if (!url) {
       return;
     }
@@ -13,6 +13,8 @@
     var match = url.match(re);
     if (match && match.length > 1) {
       return decodeURIComponent(match[1]);
+    } else {
+      return defaultValue;
     }
   };
 
