@@ -113,5 +113,18 @@
     return updatedUrl;
   };
 
-  ns[ns.exports ? 'exports' : 'UrlQuery'] = UrlQuery;
-}(typeof module !== 'undefined' && module.exports ? module : window));
+   // AMD support - from https://gist.github.com/CrocoDillon/9990078
+    if (typeof define === "function" && define.amd) {
+        define(function () { return UrlQuery; });
+    // CommonJS and Node.js module support.
+    } else if (typeof exports !== "undefined") {
+        // Support Node.js specific `module.exports` (which can be a function)
+        if (typeof module !== "undefined" && module.exports) {
+            module.exports = UrlQuery;
+        }
+        // But always support CommonJS module 1.1.1 spec (`exports` cannot be a function)
+        exports.UrlQuery = UrlQuery;
+    } else {
+        ns.UrlQuery = UrlQuery;
+    }
+})(this);
