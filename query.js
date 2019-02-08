@@ -4,7 +4,7 @@
   function UrlQuery() {}
 
   // Get query string parameter value.
-  UrlQuery.get = function (url, field, defaultValue) {
+  UrlQuery.get = function (url, field, defaultValue, skipDecode) {
     if (!url) {
       return;
     }
@@ -12,13 +12,13 @@
     var re = new RegExp("[?&]" + field + "=([^&]*)");
     var match = url.match(re);
     if (match && match.length > 1) {
-      return decodeURIComponent(match[1]);
+      return skipDecode ? match[1] : decodeURIComponent(match[1]);
     } else {
       return defaultValue;
     }
   };
 
-  UrlQuery.getAll = function (url) {
+  UrlQuery.getAll = function (url, skipDecode) {
     if (!url) {
       return {};
     }
@@ -30,7 +30,7 @@
       for (var i = 0; i < queryParts.length; i++) {
         var param = queryParts[i].split("=");
         if (param.length === 2) {
-          query[param[0]] = decodeURIComponent(param[1]);
+          query[param[0]] = skipDecode ? param[1] : decodeURIComponent(param[1]);
         }
       }
     }
@@ -39,7 +39,7 @@
   };
 
   // Add or update query string parameter from an url.
-  UrlQuery.update = function (url, field, value) {
+  UrlQuery.update = function (url, field, value, skipEncode) {
     if (url === undefined) {
       return url;
     }
@@ -47,15 +47,15 @@
     var re = new RegExp("([?&])" + field + "=[^&]*");
     var match = url.match(re);
     if (match && match.length > 1) {
-      return url.replace(re, "$1" + field + "=" + encodeURIComponent(value));
+      return url.replace(re, "$1" + field + "=" + (skipEncode ? value : encodeURIComponent(value)));
     } else {
       var separator = url.indexOf("?") > 0 ? "&": "?";
-      return url + separator + field + "=" + encodeURIComponent(value);
+      return url + separator + field + "=" + (skipEncode ? value : encodeURIComponent(value));
     }
   };
 
   // Add or update multiple query string parameters from an url.
-  UrlQuery.updateAll = function (url, fields, values) {
+  UrlQuery.updateAll = function (url, fields, values, skipEncode) {
     if (url === undefined || !fields || !values) {
       return url;
     }
@@ -66,7 +66,7 @@
 
     var updatedUrl = url;
     for (var i = 0; i < fields.length; i++) {
-      updatedUrl = UrlQuery.update(updatedUrl, fields[i], values[i]);
+      updatedUrl = UrlQuery.update(updatedUrl, fields[i], values[i], skipEncode);
     }
 
     return updatedUrl;

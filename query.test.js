@@ -14,6 +14,7 @@ assert(urlQuery.get("http://example.com/a/b?c=1&d=2&e=a%3Db%26c%3Dd&f=&g=5", "e"
 assert(urlQuery.get("http://example.com/a/b", "c") === undefined);
 assert(urlQuery.get("http://example.com/a/b", "c", "1") === "1");
 assert(urlQuery.get("http://example.com/a/b?c=1", "d", "2") === "2");
+assert(urlQuery.get("http://explore.com/a/b?s=c:1,d:100%25%20Correct", "s", undefined, true) === "c:1,d:100%25%20Correct");
 
 //Test 'getAll'.
 assert.deepEqual(urlQuery.getAll(undefined), {});
@@ -22,6 +23,8 @@ assert.deepEqual(urlQuery.getAll("http://example.com/a/b?c=1&d=2&e=3"), {c: "1",
 assert.deepEqual(urlQuery.getAll("http://example.com/a/b?c=1&d=2&e=3&f="), {c: "1", d: "2", e: "3", f: ""});
 assert.deepEqual(urlQuery.getAll("http://example.com/a/b?c=1&d=2&e=3&f=&g=5"), {c: "1", d: "2", e: "3", f: "", g: "5"});
 assert.deepEqual(urlQuery.getAll("http://example.com/a/b?c=1&d=2&e=a%3Db%26c%3Dd&f=&g=5"), {c: "1", d: "2", e: "a=b&c=d", f: "", g: "5"});
+assert.deepEqual(urlQuery.getAll("http://explore.com/a/b?f=1&s=c:1,d:100%25%20Correct&g=5", true),
+                                {f: "1", g: "5", "s": "c:1,d:100%25%20Correct"});
 
 // Test 'update'.
 assert(urlQuery.update(undefined, "c", "1") === undefined);
@@ -36,8 +39,12 @@ assert(urlQuery.update("http://example.com/a/b?d=2", "c", "1") === "http://examp
 assert(urlQuery.update("http://example.com/a/b?d=2&e=3", "c", "1") === "http://example.com/a/b?d=2&e=3&c=1");
 assert(urlQuery.update("http://example.com/a/b?d=2&e=3", "g") === "http://example.com/a/b?d=2&e=3&g=undefined");
 assert(urlQuery.update("http://example.com/a/b?d=2&c=1&e=3", "c") === "http://example.com/a/b?d=2&c=undefined&e=3");
+assert(urlQuery.update("http://example.com/a/b?d=2&e=3", "s", "c:1,d:100%25%20Correct", true) ===
+                        "http://example.com/a/b?d=2&e=3&s=c:1,d:100%25%20Correct");
+assert(urlQuery.update("http://example.com/a/b?d=2&s=c:1,d:10%25%20Correct&e=3", "s", "c:1,d:100%25%20Correct", true) ===
+                        "http://example.com/a/b?d=2&s=c:1,d:100%25%20Correct&e=3");
 
-//Test 'updateAll'.
+// Test 'updateAll'.
 assert(urlQuery.updateAll(undefined, ["c"], ["1"]) === undefined);
 assert(urlQuery.updateAll("", ["c"], ["1"]) === "?c=1");
 assert(urlQuery.updateAll("http://example.com/a/b", ["c"], ["1"]) === "http://example.com/a/b?c=1");
@@ -53,6 +60,8 @@ assert(urlQuery.updateAll("http://example.com/a/b?d=2&e=3", ["g"]) === "http://e
 assert(urlQuery.updateAll("http://example.com/a/b?d=2&e=3", undefined, ["g"]) === "http://example.com/a/b?d=2&e=3");
 assert(urlQuery.updateAll("http://example.com/a/b?d=2&e=3") === "http://example.com/a/b?d=2&e=3");
 assert(urlQuery.updateAll("http://example.com/a/b?d=2&e=3", ["g"], []) === "http://example.com/a/b?d=2&e=3");
+assert(urlQuery.updateAll("http://example.com/a/b?d=2&s=c:1,d:10%25%20Correct&e=3", ["d", "e", "s"], ["3", "4", "c:1,d:100%25%20Correct"], true) ===
+                           "http://example.com/a/b?d=3&s=c:1,d:100%25%20Correct&e=4");
 
 // Test 'remove'.
 assert(urlQuery.remove("http://example.com/a/b", "c") === "http://example.com/a/b");
